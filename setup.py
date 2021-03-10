@@ -1,16 +1,16 @@
 from setuptools import setup
 
-VERSION = "0.41.0"
+VERSION = "0.1.0"
 
 setup(
     name="opp-net",
     version=VERSION,
     license="GPL v3",
-    author="Nabu Casa, Inc.",
+    author="Open Peer Power",
     author_email="opensource@openpeerpower.com",
     url="https://www.openpeerpower.com/",
-    download_url="https://github.com/NabuCasa/opp-net/tarball/{}".format(VERSION),
-    description=("Open Peer Power cloud integration by Nabu Casa, Inc."),
+    download_url="https://github.com/OpenPeerPower/opp-net/tarball/{}".format(VERSION),
+    description=("Open Peer Power cloud integration"),
     long_description=(""),
     classifiers=[
         "Intended Audience :: End Users/Desktop",
@@ -26,7 +26,7 @@ setup(
     keywords=["openpeerpower", "cloud"],
     zip_safe=False,
     platforms="any",
-    packages=["opp_nabucasa"],
+    packages=["opp_net"],
     install_requires=[
         "pycognito==0.1.5",
         "snitun==0.20",

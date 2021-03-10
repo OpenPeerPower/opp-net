@@ -5,7 +5,7 @@ import tempfile
 from typing import Any
 from tests.async_mock import Mock
 
-from opp_nabucasa.client import CloudClient
+from opp_net.client import CloudClient
 
 
 class TestClient(CloudClient):

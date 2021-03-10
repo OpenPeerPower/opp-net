@@ -3,7 +3,7 @@ import pytest
 
 import aiohttp
 
-from opp_nabucasa import thingtalk
+from opp_net import thingtalk
 
 API_URL = "https://example.com"
 CONVERT_URL = f"{API_URL}/convert"

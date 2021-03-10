@@ -4,7 +4,7 @@ from tests.async_mock import AsyncMock, Mock
 
 from aiohttp import web
 import pytest
-from opp_nabucasa import account_link
+from opp_net import account_link
 
 
 async def create_account_link_server(aiohttp_client, handle_server_msgs):

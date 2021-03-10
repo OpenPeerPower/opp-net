@@ -2,8 +2,8 @@
 import json
 from tests.async_mock import AsyncMock, patch, MagicMock, Mock, PropertyMock
 
-import opp_nabucasa as cloud
-from opp_nabucasa.utils import utcnow
+import opp_net as cloud
+from opp_net.utils import utcnow
 
 
 def test_constructor_loads_info_from_constant(cloud_client):
@@ -75,8 +75,8 @@ async def test_initialize_loads_info(cloud_client):
 
     cl._on_start.extend([cl.iot.connect, cl.remote.connect])
 
-    with patch("opp_nabucasa.Cloud._decode_claims"), patch(
-        "opp_nabucasa.Cloud.user_info_path",
+    with patch("opp_net.Cloud._decode_claims"), patch(
+        "opp_net.Cloud.user_info_path",
         new_callable=PropertyMock(return_value=info_file),
     ):
         await cl.start()
@@ -106,8 +106,8 @@ async def test_initialize_loads_invalid_info(cloud_client, caplog):
 
     cl._on_start.extend([cl.iot.connect, cl.remote.connect])
 
-    with patch("opp_nabucasa.Cloud._decode_claims"), patch(
-        "opp_nabucasa.Cloud.user_info_path",
+    with patch("opp_net.Cloud._decode_claims"), patch(
+        "opp_net.Cloud.user_info_path",
         new_callable=PropertyMock(return_value=info_file),
     ):
         await cl.start()
@@ -152,7 +152,7 @@ async def test_logout_clears_info(cloud_client):
     )
 
     with patch(
-        "opp_nabucasa.Cloud.user_info_path",
+        "opp_net.Cloud.user_info_path",
         new_callable=PropertyMock(return_value=info_file),
     ):
         await cl.logout()
@@ -174,7 +174,7 @@ def test_write_user_info(cloud_client):
     cl.access_token = "test-access-token"
     cl.refresh_token = "test-refresh-token"
 
-    with patch("pathlib.Path.chmod"), patch("opp_nabucasa.atomic_write") as mock_write:
+    with patch("pathlib.Path.chmod"), patch("opp_net.atomic_write") as mock_write:
         cl.write_user_info()
 
     mock_file = mock_write.return_value.__enter__.return_value
@@ -194,13 +194,13 @@ def test_subscription_expired(cloud_client):
 
     token_val = {"custom:sub-exp": "2017-11-13"}
     with patch.object(cl, "_decode_claims", return_value=token_val), patch(
-        "opp_nabucasa.utcnow",
+        "opp_net.utcnow",
         return_value=utcnow().replace(year=2017, month=11, day=13),
     ):
         assert not cl.subscription_expired
 
     with patch.object(cl, "_decode_claims", return_value=token_val), patch(
-        "opp_nabucasa.utcnow",
+        "opp_net.utcnow",
         return_value=utcnow().replace(
             year=2017, month=11, day=19, hour=23, minute=59, second=59
         ),
@@ -208,7 +208,7 @@ def test_subscription_expired(cloud_client):
         assert not cl.subscription_expired
 
     with patch.object(cl, "_decode_claims", return_value=token_val), patch(
-        "opp_nabucasa.utcnow",
+        "opp_net.utcnow",
         return_value=utcnow().replace(
             year=2017, month=11, day=20, hour=0, minute=0, second=0
         ),
@@ -222,7 +222,7 @@ def test_subscription_not_expired(cloud_client):
 
     token_val = {"custom:sub-exp": "2017-11-13"}
     with patch.object(cl, "_decode_claims", return_value=token_val), patch(
-        "opp_nabucasa.utcnow",
+        "opp_net.utcnow",
         return_value=utcnow().replace(year=2017, month=11, day=9),
     ):
         assert not cl.subscription_expired

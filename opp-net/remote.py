@@ -27,7 +27,7 @@ class RemoteError(Exception):
 
 
 class RemoteBackendError(RemoteError):
-    """Backend problem with nabucasa API."""
+    """Backend problem with OpenPeerPower API."""
 
 
 class RemoteInsecureVersion(RemoteError):

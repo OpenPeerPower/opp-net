@@ -1,7 +1,7 @@
 """Test cloud API."""
 
 
-from opp_nabucasa import cloud_api
+from opp_net import cloud_api
 
 
 async def test_create_cloudhook(auth_cloud_mock, aioclient_mock):
@@ -27,7 +27,7 @@ async def test_remote_register(auth_cloud_mock, aioclient_mock):
         "https://example.com/bla/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -38,7 +38,7 @@ async def test_remote_register(auth_cloud_mock, aioclient_mock):
     assert len(aioclient_mock.mock_calls) == 1
     assert await resp.json() == {
         "domain": "test.dui.nabu.casa",
-        "email": "test@nabucasa.inc",
+        "email": "test@openpeerpower.inc",
         "server": "rest-remote.nabu.casa",
     }
 

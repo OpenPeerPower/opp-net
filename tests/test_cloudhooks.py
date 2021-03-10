@@ -3,7 +3,7 @@ from tests.async_mock import AsyncMock, Mock
 
 import pytest
 
-from opp_nabucasa import cloudhooks
+from opp_net import cloudhooks
 
 
 @pytest.fixture

@@ -5,14 +5,14 @@ from tests.async_mock import patch, Mock
 
 import pytest
 
-from opp_nabucasa.const import (
+from opp_net.const import (
     DISPATCH_REMOTE_BACKEND_DOWN,
     DISPATCH_REMOTE_BACKEND_UP,
     DISPATCH_REMOTE_CONNECT,
     DISPATCH_REMOTE_DISCONNECT,
 )
-from opp_nabucasa.remote import RemoteUI, SubscriptionExpired
-from opp_nabucasa.utils import utcnow
+from opp_net.remote import RemoteUI, SubscriptionExpired
+from opp_net.utils import utcnow
 
 from .common import MockAcme, MockSnitun
 
@@ -23,7 +23,7 @@ from .common import MockAcme, MockSnitun
 def ignore_context():
     """Ignore ssl context."""
     with patch(
-        "opp_nabucasa.remote.RemoteUI._create_context", return_value=None
+        "opp_net.remote.RemoteUI._create_context", return_value=None
     ) as context:
         yield context
 
@@ -31,7 +31,7 @@ def ignore_context():
 @pytest.fixture
 def acme_mock():
     """Mock ACME client."""
-    with patch("opp_nabucasa.remote.AcmeHandler", new_callable=MockAcme) as acme:
+    with patch("opp_net.remote.AcmeHandler", new_callable=MockAcme) as acme:
         yield acme
 
 
@@ -46,7 +46,7 @@ def valid_acme_mock(acme_mock):
 @pytest.fixture
 async def snitun_mock():
     """Mock ACME client."""
-    with patch("opp_nabucasa.remote.SniTunClientAioHttp", MockSnitun()) as snitun:
+    with patch("opp_net.remote.SniTunClientAioHttp", MockSnitun()) as snitun:
         yield snitun
 
 
@@ -69,7 +69,7 @@ async def test_load_backend_exists_cert(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -92,7 +92,7 @@ async def test_load_backend_exists_cert(
     assert valid_acme_mock.init_args == (
         auth_cloud_mock,
         "test.dui.nabu.casa",
-        "test@nabucasa.inc",
+        "test@openpeerpower.inc",
     )
     assert valid_acme_mock.call_hardening
     assert snitun_mock.call_start
@@ -127,7 +127,7 @@ async def test_load_backend_not_exists_cert(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -150,7 +150,7 @@ async def test_load_backend_not_exists_cert(
     assert acme_mock.init_args == (
         auth_cloud_mock,
         "test.dui.nabu.casa",
-        "test@nabucasa.inc",
+        "test@openpeerpower.inc",
     )
     assert acme_mock.call_hardening
     assert snitun_mock.call_start
@@ -180,7 +180,7 @@ async def test_load_and_unload_backend(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -202,7 +202,7 @@ async def test_load_and_unload_backend(
     assert valid_acme_mock.init_args == (
         auth_cloud_mock,
         "test.dui.nabu.casa",
-        "test@nabucasa.inc",
+        "test@openpeerpower.inc",
     )
     assert valid_acme_mock.call_hardening
     assert snitun_mock.call_start
@@ -239,7 +239,7 @@ async def test_load_backend_exists_wrong_cert(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -262,7 +262,7 @@ async def test_load_backend_exists_wrong_cert(
     assert valid_acme_mock.init_args == (
         auth_cloud_mock,
         "test.dui.nabu.casa",
-        "test@nabucasa.inc",
+        "test@openpeerpower.inc",
     )
     assert valid_acme_mock.call_hardening
     assert snitun_mock.call_start
@@ -289,7 +289,7 @@ async def test_call_disconnect(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -327,7 +327,7 @@ async def test_load_backend_no_autostart(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -374,7 +374,7 @@ async def test_get_certificate_details(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -415,7 +415,7 @@ async def test_certificate_task_no_backend(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -431,7 +431,7 @@ async def test_certificate_task_no_backend(
 
     acme_mock.expire_date = valid
 
-    with patch("opp_nabucasa.utils.next_midnight", return_value=0), patch(
+    with patch("opp_net.utils.next_midnight", return_value=0), patch(
         "random.randint", return_value=0
     ):
         remote._acme_task = loop.create_task(remote._certificate_handler())
@@ -452,7 +452,7 @@ async def test_certificate_task_renew_cert(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -468,7 +468,7 @@ async def test_certificate_task_renew_cert(
 
     acme_mock.expire_date = utcnow() + timedelta(days=-40)
 
-    with patch("opp_nabucasa.utils.next_midnight", return_value=0), patch(
+    with patch("opp_net.utils.next_midnight", return_value=0), patch(
         "random.randint", return_value=0
     ):
         remote._acme_task = loop.create_task(remote._certificate_handler())
@@ -498,7 +498,7 @@ async def test_load_connect_insecure(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
@@ -540,7 +540,7 @@ async def test_call_disconnect_clean_token(
         "https://test.local/api/register_instance",
         json={
             "domain": "test.dui.nabu.casa",
-            "email": "test@nabucasa.inc",
+            "email": "test@openpeerpower.inc",
             "server": "rest-remote.nabu.casa",
         },
     )
